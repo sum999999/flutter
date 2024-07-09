@@ -27,7 +27,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  dio: ^5.0.3
+  fluro: ^2.0.5
 
   # 以下将 Cupertino Icons 字体添加到您的应用程序中。
   # 与 CupertinoIcons 类一起使用以获得 iOS 样式的图标。
@@ -36,7 +37,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   # 下面的 "flutter_lints" 包包含了一组推荐的 lint 规则，
   # 以鼓励良好的编码实践。该包提供的 lint 集在
   # 包根目录下的 `analysis_options.yaml` 文件中激活。
@@ -55,6 +55,7 @@ flutter:
   uses-material-design: true
   assets:
     - images/
+    - images/welfareBg.png
   # 要向应用程序添加资源，请添加一个资源部分，如下所示：
   # assets:
   #   - images/a_dot_burr.jpeg

@@ -3,7 +3,13 @@ import './listViewDemo.dart';
 import './textDemo.dart';
 import './statemanger.dart';
 import './bottomNav.dart';
+import './page/find.dart';
+import './page/friend.dart';
+import './page/home.dart';
+import './page/my.dart';
+import './routes/router.dart';
 void main() {
+  defineRoutes();
   runApp(const MyApp());
 }
 
@@ -15,6 +21,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'flutter',
+      routes: {
+        '/my':(context) =>const My(),
+      },
+       onGenerateRoute: router.generator, // 设置路由生成器
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
