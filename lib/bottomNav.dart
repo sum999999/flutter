@@ -3,7 +3,7 @@ import './page/find.dart';
 import './page/friend.dart';
 import './page/home.dart';
 import './page/my.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
@@ -14,59 +14,64 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Home Page'),
-    Text('Find Page'),
-    Text('Friend Page'),
-    Text('My Page'),
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
   ];
-  static const List<Widget> _pages = <Widget>[ Home(), Find(), Friend(),My()];
+
+  static const List<Widget> _pages = <Widget>[
+    Home(),
+    Find(),
+    Friend(),
+    My(),
+  ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (_selectedIndex == index) {
+      _navigatorKeys[index].currentState!.popUntil((route) => route.isFirst);
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  Widget _buildOffstageNavigator(int index) {
+    return Offstage(
+      offstage: _selectedIndex != index,
+      child: Navigator(
+        key: _navigatorKeys[index],
+        onGenerateRoute: (RouteSettings settings) {
+          return MaterialPageRoute(
+            builder: (context) => _pages[index],
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
+      body: Stack(
+        children: _pages.asMap().map((index, page) {
+          return MapEntry(index, _buildOffstageNavigator(index));
+        }).values.toList(),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Image.asset('images/icon_nav1.svg', width: 24, height: 24),
-            activeIcon: Image.asset('images/welfareBg.png',
-                width: 24, height: 24, color: Colors.black),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('images/welfareBg.png', width: 24, height: 24),
-            activeIcon: Image.asset('images/welfareBg.png',
-                width: 24, height: 24, color: Colors.black),
-            label: 'Find',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.network(
-                'https://res.klook.com/image/upload/c_fill,w_1265,h_712/q_80/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/dovf9udmncfetf2ahdpp.webp',
-                width: 24,
-                height: 24),
-            activeIcon: Image.asset('images/welfareBg.png',
-                width: 24, height: 24, color: Colors.black),
-            label: 'Friend',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset('images/welfareBg.png', width: 24, height: 24),
-            activeIcon: Image.network(
-                'https://res.klook.com/image/upload/c_fill,w_1265,h_712/q_80/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/dovf9udmncfetf2ahdpp.webp',
-                width: 24,
-                height: 24),
-            label: 'My',
-          ),
-        ],
+        items: _navItems.map((item) {
+          return BottomNavigationBarItem(
+            icon: item['icon'].startsWith('http')
+                ? Image.network(item['icon'], width: 24, height: 24)
+                : SvgPicture.asset(item['icon'], width: 24, height: 24),
+          activeIcon: item['activeIcon'].startsWith('http')
+                ? Image.network(item['activeIcon'], width: 24, height: 24, color: Colors.black)
+                : Image.asset(item['activeIcon'], width: 24, height: 24, color: Colors.black),
+            label: item['label'],
+          );
+        }).toList(),
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.red,
@@ -75,4 +80,27 @@ class _BottomNavState extends State<BottomNav> {
       ),
     );
   }
+
+  final List<Map<String, dynamic>> _navItems = [
+    {
+      'label': 'Home',
+      'icon': 'images/vip.svg',
+      'activeIcon': 'images/welfareBg.png',
+    },
+    {
+      'label': 'Find',
+      'icon': 'images/welfareBg.png',
+      'activeIcon': 'images/welfareBg.png',
+    },
+    {
+      'label': 'Friend',
+      'icon': 'https://res.klook.com/image/upload/c_fill,w_1265,h_712/q_80/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/dovf9udmncfetf2ahdpp.webp',
+      'activeIcon': 'images/welfareBg.png',
+    },
+    {
+      'label': 'My',
+      'icon': 'images/welfareBg.png',
+      'activeIcon': 'https://res.klook.com/image/upload/c_fill,w_1265,h_712/q_80/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/dovf9udmncfetf2ahdpp.webp',
+    },
+  ];
 }

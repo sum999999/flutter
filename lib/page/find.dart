@@ -10,6 +10,12 @@ class Find extends StatefulWidget {
 }
 
 class _FindState extends State<Find> {
+  bool showText = true;
+  void _onItemTapped() {
+    setState(() {
+      showText = !showText;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,15 +25,28 @@ class _FindState extends State<Find> {
         ),
         body: ListView(
           children: [
+             Center(
+                child: Row(
+              children: [
+                GestureDetector(
+                  onTap: _onItemTapped,
+                  child:const  Text(
+                    '测试显示与隐藏',
+                    style: TextStyle(fontSize: 24, color: Colors.blue),
+                  ),
+                ),
+                showText ? const Text('hide') : Container(),
+              ],
+            )),
             Cell(
-              title: '我的',
+              title: '我的页面',
               imagePath: 'images/welfareBg.png',
               onTap: () {
                 Navigator.pushNamed(context, '/my');
               },
             ),
             Cell(
-              title: '收藏',
+              title: '朋友页面',
               imagePath: 'images/welfareBg.png',
               onTap: () {
                 router.navigateTo(context, "/friend");
@@ -41,24 +60,31 @@ class _FindState extends State<Find> {
               },
             ),
             Cell(
-              title: '卡包',
+              title: 'home',
               imagePath: 'images/welfareBg.png',
               onTap: () {
-                print('点击了卡包');
+                router.navigateTo(context, "/");
               },
             ),
             Cell(
-              title: '表情',
+              title: 'drawer',
               imagePath: 'images/welfareBg.png',
               onTap: () {
-                print('点击了表情');
+                router.navigateTo(context, "/drawer");
               },
             ),
             Cell(
-              title: '设置',
+              title: 'WelfarePage',
               imagePath: 'images/welfareBg.png',
               onTap: () {
-                print('点击了设置');
+                router.navigateTo(context, "/WelfarePage");
+              },
+            ),
+            Cell(
+              title: '手指上拉弹窗',
+              imagePath: 'images/welfareBg.png',
+              onTap: () {
+                router.navigateTo(context, "/SheetPage");
               },
             ),
           ],

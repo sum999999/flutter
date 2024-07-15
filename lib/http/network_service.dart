@@ -1,29 +1,42 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
-class NetworkService {
+class NetworkService extends ChangeNotifier {
   final Dio _dio = Dio(BaseOptions(
     baseUrl: 'https://jsonplaceholder.typicode.com',
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 3000),
   ));
 
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
   NetworkService() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
+        _setLoading(true);
         // 在请求头中添加 token 或其他信息
         options.headers["Authorization"] = "Bearer your_token";
         return handler.next(options);
       },
       onResponse: (response, handler) {
+        _setLoading(false);
         // 处理响应数据
         return handler.next(response);
       },
-      onError: (DioException e, handler) {
+      onError: (DioError e, handler) {
+        _setLoading(false);
         // 处理错误
-        if (e.type == DioExceptionType.connectionTimeout) {
+        if (e.type == DioErrorType.connectionTimeout) {
           // 连接超时
           print("Connection Timeout");
-        } else if (e.type == DioExceptionType.receiveTimeout) {
+        } else if (e.type == DioErrorType.receiveTimeout) {
           // 接收超时
           print("Receive Timeout");
         } else if (e.response != null) {

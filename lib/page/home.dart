@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import './tab.dart';
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -15,9 +15,7 @@ class _HomeState extends State<Home> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('home'),
         ),
-        body:const Center(
-             child:Text('home page')
-        )
+        body:const TabPage()
     );
   }
 }

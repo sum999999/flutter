@@ -29,7 +29,8 @@ dependencies:
     sdk: flutter
   dio: ^5.0.3
   fluro: ^2.0.5
-
+  provider: ^6.0.0
+  flutter_svg: ^1.0.0
   # 以下将 Cupertino Icons 字体添加到您的应用程序中。
   # 与 CupertinoIcons 类一起使用以获得 iOS 样式的图标。
   cupertino_icons: ^1.0.6
@@ -56,6 +57,7 @@ flutter:
   assets:
     - images/
     - images/welfareBg.png
+    - images/vip.svg
   # 要向应用程序添加资源，请添加一个资源部分，如下所示：
   # assets:
   #   - images/a_dot_burr.jpeg

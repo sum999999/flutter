@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../listViewDemo.dart';
 class Friend extends StatefulWidget {
   const Friend({super.key});
 
@@ -10,10 +10,20 @@ class Friend extends StatefulWidget {
 class _FriendState extends State<Friend> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
-            child:Text('Friend page')
-        )
+    return  Scaffold(
+        appBar: AppBar(
+          title: const Text('friend'),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/find');
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset('images/welfareBg.png'),
+            ),
+          ),
+        ),
+        body:const Listviewdemo()
     );
   }
 }
